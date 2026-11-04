@@ -3,7 +3,7 @@ import { assembleDocument } from "../src/core/assemble";
 import { findConflicts } from "../src/core/conflicts";
 import { extractFromItems, PAGES } from "../src/pipeline/extract";
 import { readTextItems, sha256File } from "../src/pipeline/pdf-text";
-import { extractedSchema } from "../src/pipeline/schema";
+import { extractedSchema } from "../src/data/schema";
 
 const PDF = "sources/isoo-scg-handbook-2018.pdf";
 const PINNED_SHA256 = "290a92cd92bf9af88d57ddee42221280a730ad03197d9270984b0d33efc63415";
@@ -55,6 +55,9 @@ describe("extracting the ISOO handbook", async () => {
     const levels = data.answerKey.paragraphs.map((p) => p.marking.level);
     expect(levels).toEqual(["S", "U", "S", "S", "S", "S", "U", "S", "U", "S", "U", "TS"]);
     expect(data.answerKey.paragraphs[3]?.note).toContain("p4");
+    expect(data.answerKey.paragraphs[4]?.note).toContain("p3");
+    const noted = data.answerKey.paragraphs.filter((p) => p.note).map((p) => p.paragraphId);
+    expect(noted).toEqual(["p3", "p4"]);
     expect(data.answerKey.paragraphs.at(-1)?.marking.controls).toEqual(["NOFORN"]);
   });
 

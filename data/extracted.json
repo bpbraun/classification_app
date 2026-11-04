@@ -61,7 +61,9 @@
         "id": "building-material-of-houses",
         "element": "Building material of houses",
         "level": "S",
-        "reasons": ["1.4(a)"],
+        "reasons": [
+          "1.4(a)"
+        ],
         "durationYears": 10,
         "controls": [],
         "source": {
@@ -73,7 +75,9 @@
         "id": "methods-used-to-destroy-houses",
         "element": "Methods used to destroy houses",
         "level": "S",
-        "reasons": ["1.4(c)"],
+        "reasons": [
+          "1.4(c)"
+        ],
         "durationYears": 25,
         "controls": [],
         "source": {
@@ -85,9 +89,13 @@
         "id": "entry-points-into-houses",
         "element": "Entry points into houses",
         "level": "TS",
-        "reasons": ["1.4(c)"],
+        "reasons": [
+          "1.4(c)"
+        ],
         "durationYears": 25,
-        "controls": ["NOFORN"],
+        "controls": [
+          "NOFORN"
+        ],
         "source": {
           "page": 12,
           "row": 6
@@ -144,7 +152,9 @@
           "id": "compilation-of-both-mission-and-geographic-locat",
           "element": "Compilation of both mission and geographic location within the same document",
           "level": "S",
-          "reasons": ["1.4(a)"],
+          "reasons": [
+            "1.4(a)"
+          ],
           "durationYears": 25,
           "controls": [],
           "source": {
@@ -166,7 +176,9 @@
           "id": "mission",
           "element": "Mission",
           "level": "S",
-          "reasons": ["1.4(a)"],
+          "reasons": [
+            "1.4(a)"
+          ],
           "durationYears": 25,
           "controls": [],
           "source": {
@@ -178,7 +190,9 @@
           "id": "geographic-location",
           "element": "Geographic Location",
           "level": "S",
-          "reasons": ["1.4(a)"],
+          "reasons": [
+            "1.4(a)"
+          ],
           "durationYears": 25,
           "controls": [],
           "source": {
@@ -190,9 +204,13 @@
           "id": "compilation-of-both-mission-and-geographic-locat",
           "element": "Compilation of both mission and geographic location within the same document",
           "level": "TS",
-          "reasons": ["1.4(a)"],
+          "reasons": [
+            "1.4(a)"
+          ],
           "durationYears": 25,
-          "controls": ["NOFORN"],
+          "controls": [
+            "NOFORN"
+          ],
           "source": {
             "page": 8,
             "row": 3
@@ -325,8 +343,7 @@
         "marking": {
           "level": "U",
           "controls": []
-        },
-        "note": "ISOO's key combines this paragraph with p6 into one portion."
+        }
       },
       {
         "paragraphId": "p9",
@@ -346,7 +363,9 @@
         "paragraphId": "p11",
         "marking": {
           "level": "TS",
-          "controls": ["NOFORN"]
+          "controls": [
+            "NOFORN"
+          ]
         }
       }
     ]

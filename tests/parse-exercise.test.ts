@@ -74,6 +74,25 @@ describe("parseAnswerKey", () => {
     expect(aligned[0]?.note).toBeUndefined();
   });
 
+  it("does not match a short repeated line to an earlier merged portion", () => {
+    const key = parseAnswerKey(lines);
+    key.portions = [
+      { marking: { level: "U", controls: [] }, text: "Let me in. Not by the hair. He blew it in." },
+      { marking: { level: "S", controls: [] }, text: "The wolf came to the bricks." },
+      { marking: { level: "U", controls: [] }, text: "Not by the hair." },
+    ];
+    const aligned = alignKey(
+      [
+        { id: "p1", text: "Let me in. Not by the hair. He blew it in." },
+        { id: "p2", text: "The wolf came to the bricks." },
+        { id: "p3", text: "Not by the hair." },
+      ],
+      key,
+    );
+    expect(aligned.map((a) => a.marking.level)).toEqual(["U", "S", "U"]);
+    expect(aligned.every((a) => a.note === undefined)).toBe(true);
+  });
+
   it("refuses to guess when a paragraph is not in the key", () => {
     const key = parseAnswerKey(lines);
     expect(() => alignKey([{ id: "p9", text: "Not in the key." }], key)).toThrow();

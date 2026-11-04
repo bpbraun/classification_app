@@ -53,19 +53,26 @@ export function parseAnswerKey(lines: readonly Line[]): ParsedKey {
 }
 
 /**
- * Lines each exercise paragraph up with the key portion that contains its text.
- * The key sometimes merges paragraphs; each merged paragraph then gets a note.
+ * Lines each exercise paragraph up with the key portion that contains its text, in order.
+ * Matching moves forward only, so a short line repeated later in the key (a pig's reply,
+ * say) can't be matched to the wrong portion. Where the key merges paragraphs, each
+ * merged paragraph gets a note.
  */
 export function alignKey(paragraphs: readonly Paragraph[], key: ParsedKey): KeyParagraph[] {
   const keyTexts = key.portions.map((p) => comparable(p.text));
-  return paragraphs.map((paragraph) => {
+  let cursor = 0;
+  const indexes = paragraphs.map((paragraph) => {
     const text = comparable(paragraph.text);
-    const index = keyTexts.findIndex((k) => k.includes(text));
+    const offset = keyTexts.slice(cursor).findIndex((k) => k.includes(text));
+    if (offset < 0) throw new Error(`No answer key portion contains paragraph ${paragraph.id}`);
+    cursor += offset;
+    return cursor;
+  });
+  return paragraphs.map((paragraph, i) => {
+    const index = indexes[i] ?? -1;
     const portion = key.portions[index];
-    if (!portion) throw new Error(`No answer key portion contains paragraph ${paragraph.id}`);
-    const sharedWith = paragraphs.filter(
-      (p) => p.id !== paragraph.id && keyTexts[index]?.includes(comparable(p.text)),
-    );
+    if (!portion) throw new Error(`No answer key portion for paragraph ${paragraph.id}`);
+    const sharedWith = paragraphs.filter((p, j) => j !== i && indexes[j] === index);
     const aligned: KeyParagraph = { paragraphId: paragraph.id, marking: portion.marking };
     if (sharedWith.length > 0) {
       aligned.note = `ISOO's key combines this paragraph with ${sharedWith.map((p) => p.id).join(", ")} into one portion.`;
