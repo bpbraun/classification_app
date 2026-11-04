@@ -8,7 +8,7 @@ export interface MarkedParagraph {
 
 export interface KeyParagraph extends MarkedParagraph {
   /** Context about the key itself, e.g. that it combines two paragraphs. */
-  note?: string;
+  note?: string | undefined;
 }
 
 export interface ComparisonRow {
@@ -16,7 +16,7 @@ export interface ComparisonRow {
   proposed: Marking | null;
   key: Marking;
   agrees: boolean;
-  note?: string;
+  note?: string | undefined;
 }
 
 export interface Comparison {

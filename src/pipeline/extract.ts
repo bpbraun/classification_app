@@ -2,7 +2,7 @@ import type { Guide } from "../core/types";
 import { groupLines, lineText, type Line, type TextItem } from "./layout";
 import { alignKey, parseAnswerKey, parseExercise, toIsoDate } from "./parse-exercise";
 import { parseTables, rowsToRules } from "./parse-table";
-import type { ExtractedData } from "./schema";
+import type { ExtractedData } from "../data/schema";
 
 export const SOURCE = {
   url: "https://www.archives.gov/files/isoo/training/scg-handbook.pdf",

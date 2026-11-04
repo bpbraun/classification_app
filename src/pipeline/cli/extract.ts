@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { extractFromItems, PAGES } from "../extract";
 import { readTextItems, sha256File } from "../pdf-text";
-import { extractedSchema } from "../schema";
+import { extractedSchema } from "../../data/schema";
 import { PATHS } from "./paths";
 
 const sha = await sha256File(PATHS.sourcePdf);

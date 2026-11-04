@@ -4,7 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { checkProposal } from "../../core/validator";
 import type { Proposal } from "../../core/types";
 import { AnthropicProposer, promptTemplateSha256 } from "../propose";
-import { extractedSchema, proposalsFileSchema, type ProposalsFile } from "../schema";
+import { extractedSchema, proposalsFileSchema, type ProposalsFile } from "../../data/schema";
 import { PATHS } from "./paths";
 
 const DEFAULT_MODEL = "claude-sonnet-5-5";

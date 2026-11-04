@@ -1,0 +1,64 @@
+{
+  "provenance": {
+    "kind": "development-fixture",
+    "description": "Hand-written placeholder used to build the interface. Not model output. Replace by running `npm run propose` before release.",
+    "model": null,
+    "promptTemplateSha256": null,
+    "sourceSha256": "290a92cd92bf9af88d57ddee42221280a730ad03197d9270984b0d33efc63415",
+    "createdAt": "2026-11-04T22:30:00Z"
+  },
+  "proposals": [
+    { "paragraphId": "title", "citedRuleIds": ["project-name"], "rationale": "Placeholder." },
+    { "paragraphId": "p1", "citedRuleIds": ["the-existence-of-pigs"], "rationale": "Placeholder." },
+    {
+      "paragraphId": "p2",
+      "citedRuleIds": ["advice-from-mom", "building-material-of-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p3",
+      "citedRuleIds": ["building-material-of-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p4",
+      "citedRuleIds": ["building-material-of-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p5",
+      "citedRuleIds": [
+        "the-existence-of-the-wolf",
+        "building-material-of-houses",
+        "methods-used-to-destroy-houses"
+      ],
+      "rationale": "Placeholder."
+    },
+    { "paragraphId": "p6", "citedRuleIds": ["the-existence-of-pigs"], "rationale": "Placeholder." },
+    {
+      "paragraphId": "p7",
+      "citedRuleIds": ["methods-used-to-destroy-houses", "building-material-of-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p8",
+      "citedRuleIds": ["methods-used-to-destroy-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p9",
+      "citedRuleIds": ["building-material-of-houses", "methods-used-to-destroy-houses"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p10",
+      "citedRuleIds": ["the-existence-of-pigs"],
+      "rationale": "Placeholder."
+    },
+    {
+      "paragraphId": "p11",
+      "citedRuleIds": ["entry-points-into-houses", "building-material-of-houses"],
+      "rationale": "Placeholder."
+    }
+  ]
+}

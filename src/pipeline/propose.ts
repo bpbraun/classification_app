@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import type { Guide, Paragraph, Proposal } from "../core/types";
-import { modelAnswerSchema } from "./schema";
+import { modelAnswerSchema } from "../data/schema";
 
 /** Anything that can say which rules a paragraph reveals. */
 export interface Proposer {

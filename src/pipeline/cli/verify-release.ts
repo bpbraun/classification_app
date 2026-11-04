@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { sha256File } from "../pdf-text";
 import { promptTemplateSha256 } from "../propose";
 import { releaseProblems } from "../release-check";
-import { extractedSchema, proposalsFileSchema } from "../schema";
+import { extractedSchema, proposalsFileSchema } from "../../data/schema";
 import { PATHS } from "./paths";
 
 const data = extractedSchema.parse(JSON.parse(await readFile(PATHS.extracted, "utf8")));

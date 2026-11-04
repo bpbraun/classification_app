@@ -1,4 +1,4 @@
-import type { ExtractedData, ProposalsFile } from "./schema";
+import type { ExtractedData, ProposalsFile } from "../data/schema";
 
 /**
  * Problems that must block a public release. Pure, so it is unit tested;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { releaseProblems } from "../src/pipeline/release-check";
-import type { ExtractedData, ProposalsFile } from "../src/pipeline/schema";
+import type { ExtractedData, ProposalsFile } from "../src/data/schema";
 import { threeLittlePigs } from "./fixtures/three-little-pigs";
 
 const SHA = "a".repeat(64);

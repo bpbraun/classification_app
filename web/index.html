@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      name="description"
+      content="A working demo of turning a security classification guide into machine-readable rules and cited markings, on ISOO's public training material."
+    />
+    <title>From Static Guide to Cited Markings | Braun Applied Intelligence</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a href="https://www.braun-ai.com" class="logo-link">
+          <img src="/bai-logo.png" alt="Braun Applied Intelligence" width="160" height="60" />
+        </a>
+        <span class="header-tag">ACME Function 2 Demo</span>
+      </div>
+    </header>
+    <main id="main" class="wrap">
+      <noscript>
+        <p class="notice">This walkthrough needs JavaScript to run the marking check.</p>
+      </noscript>
+      <div id="app"></div>
+      <p id="status" class="visually-hidden" role="status" aria-live="polite"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
