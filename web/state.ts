@@ -1,11 +1,9 @@
 import {
   assembleDocument,
-  bannerText,
   checkProposal,
+  compactDate,
   compareToKey,
   findConflicts,
-  maxLevel,
-  unionControls,
   type AuthorityBlock,
   type CheckResult,
   type Comparison,
@@ -23,8 +21,8 @@ export interface PortionView {
   proposal: Proposal;
   /** What the cited rules support. Null when no rule applies. */
   proposed: Marking | null;
-  /** What the portion is marked right now: the viewer's override, or the proposed marking. */
-  current: Marking;
+  /** What the portion is marked right now. Null only when no rule applies and nothing was chosen. */
+  current: Marking | null;
   changed: boolean;
   check: CheckResult;
 }
@@ -33,8 +31,11 @@ export interface DocumentView {
   portions: PortionView[];
   banner: string;
   authorityBlock: AuthorityBlock | null;
+  /** True when our Declassify On is the same date as ISOO's, whatever the format. */
+  declassifyMatchesKey: boolean;
   comparison: Comparison;
   conflicts: Conflict[];
+  supportedCount: number;
   isFixture: boolean;
 }
 
@@ -60,26 +61,31 @@ export function buildView(
   const portions = data.exercise.paragraphs.map((paragraph) =>
     buildPortion(data, proposalFor(proposals, paragraph.id), paragraph, overrides),
   );
-  const current = portions.map((p) => p.current);
-  const overall: Marking = {
-    level: maxLevel(current.map((m) => m.level)),
-    controls: unionControls(current.map((m) => m.controls)),
-  };
-  const assembled = assembleDocument(data.guide, proposals.proposals, {
-    documentDate: data.answerKey.documentDate,
-    classifiedBy,
-  });
+  const assembled = assembleDocument(
+    data.guide,
+    portions.map((p) => ({
+      citedRuleIds: p.proposal.citedRuleIds,
+      marking: p.current ?? UNMARKED,
+    })),
+    { documentDate: data.answerKey.documentDate, classifiedBy },
+  );
   const [exampleOne, exampleTwo] = data.examples;
+  const keyDate = compactDate(data.answerKey.authorityBlock.declassifyOnDate);
 
   return {
     portions,
-    banner: bannerText(overall),
-    authorityBlock: overall.level === "U" ? null : assembled.authorityBlock,
+    banner: assembled.banner,
+    authorityBlock: assembled.authorityBlock,
+    declassifyMatchesKey: assembled.authorityBlock?.declassifyOn === keyDate,
     comparison: compareToKey(
-      portions.map((p) => ({ paragraphId: p.paragraph.id, marking: p.current })),
+      portions.flatMap((p) =>
+        p.current ? [{ paragraphId: p.paragraph.id, marking: p.current }] : [],
+      ),
       data.answerKey.paragraphs,
     ),
     conflicts: exampleOne && exampleTwo ? findConflicts(exampleOne, exampleTwo) : [],
+    supportedCount: portions.filter((p) => p.check.findings.every((f) => f.kind === "supported"))
+      .length,
     isFixture: proposals.provenance.kind !== "model",
   };
 }
@@ -91,16 +97,15 @@ function buildPortion(
   overrides: Overrides,
 ): PortionView {
   const override = overrides.get(paragraph.id);
-  const proposed = checkProposal(data.guide, proposal).derived;
-  const current = override ?? proposed ?? UNMARKED;
+  const check = checkProposal(data.guide, proposal, override);
   return {
     paragraph,
     label: labelFor(paragraph.id),
     proposal,
-    proposed,
-    current,
+    proposed: check.derived,
+    current: override ?? check.derived,
     changed: override !== undefined,
-    check: checkProposal(data.guide, proposal, current),
+    check,
   };
 }
 

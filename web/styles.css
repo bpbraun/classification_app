@@ -502,3 +502,38 @@ input[type="checkbox"] {
 .contact a {
   color: #8fe3fa;
 }
+
+.result {
+  font-size: 16px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: #eef7f1;
+  border: 1px solid #cfe8d7;
+}
+
+/* Inline links get a 44px-tall tap area on touch screens without changing line layout much. */
+.tap {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+}
+
+@media (pointer: coarse) {
+  .tap {
+    min-height: 44px;
+    line-height: 24px;
+  }
+}
+
+tr:target,
+tr:focus {
+  outline: 3px solid var(--cyan);
+  outline-offset: -3px;
+  background: #e8f8fd;
+}
+
+.skip-link:focus {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
