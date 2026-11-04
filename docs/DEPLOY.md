@@ -30,10 +30,16 @@ Then go back to GitHub and click **Verify** on the domain from step 2.
 
 After the DNS check passes on **Settings → Pages** (it can take a few minutes), tick **Enforce HTTPS**.
 
-## 5. Publish
+## 5. Protect Main and the Model Key
 
-1. **Model run:** **Actions → Run model → Run workflow** on `main`. It needs the `ANTHROPIC_API_KEY` repository secret (**Settings → Secrets and variables → Actions**). It opens a review branch with the citations.
-2. **Review and merge:** Read the citations in the pull request, then merge it. Merging to `main` runs the deploy.
+1. **Branch protection:** **Settings → Branches → Add rule** for `main`: require a pull request before merging, require the `check` status to pass, and don't allow bypassing.
+2. **Model environment:** **Settings → Environments → New environment** named `model-run`. Add yourself as a required reviewer, limit deployment branches to `main`, and add the secret `ANTHROPIC_API_KEY` here (an environment secret, not a repository secret). Only the Run model workflow can then use the key, and only after you approve the run.
+3. **Pages environment:** **Settings → Environments → github-pages**: limit deployment branches to `main`.
+
+## 6. Publish
+
+1. **Model run:** **Actions → Run model → Run workflow** on `main`, then approve the run when GitHub asks. It opens a review branch with the citations.
+2. **Review and merge:** Read the citations in the pull request. Pull requests opened by the workflow don't start CI on their own, so push an empty commit to the branch or run `npm run check` locally, then merge. Merging to `main` runs the deploy.
 3. **Check:** Open https://demo.braun-ai.com on a phone.
 
 The deploy refuses to publish placeholder citations, stale citations, or data built from a different PDF.

@@ -25,6 +25,7 @@ A copy is kept in `sources/`, pinned by SHA-256 (`290a92cd...efc63415`). The pip
 | -------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Core     | `src/core/`     | Pure TypeScript domain logic: rules, validator, marking assembly, answer-key comparison, conflict check. No I/O. Runs in Node and the browser. |
 | Pipeline | `src/pipeline/` | Offline steps: extract rules from the PDF, ask a model for citations, verify a release.                                                        |
+| Data     | `src/data/`     | Runtime schemas for every file that crosses a trust boundary (PDF output, model output).                                                       |
 | Web      | `web/`          | Static walkthrough page. Bundles the committed data and runs the core validator live.                                                          |
 
 Design notes and decisions live in [`docs/agile/decisions/`](docs/agile/decisions/).
@@ -48,7 +49,8 @@ npm run verify-release
 
 - The published site is static: no backend, no API keys, no uploads, no cookies, no analytics, no third-party requests. A Content Security Policy limits the page to its own files.
 - Model output is untrusted. It's schema-validated, it can only cite rule ids, and fixed code decides every marking.
-- Releases are blocked unless proposals come from a real model run against the pinned PDF and the current prompt.
+- The deploy workflow refuses to publish unless the proposals come from a recorded model run against the pinned PDF, the current prompt, and the current rules, and cite only rules that exist. This is a process control, not tamper-proofing.
+- The model key lives only in a protected GitHub environment or your local `.env`. See [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## License
 

@@ -1,6 +1,6 @@
 ---
 name: Pages deploy and custom domain
-status: Not started
+status: Waiting on repo settings and DNS
 sprint: 1
 ---
 
@@ -13,3 +13,7 @@ sprint: 1
 - Rollback: redeploy an earlier commit from the Actions tab
 
 ## Activity
+
+- 2026-11-04: Developer (orchestrator, inline): CI, deploy, and Run model workflows; CNAME; docs/DEPLOY.md with the Squarespace DNS records, domain verification, and branch protection.
+- 2026-11-04: Security Check (Sonnet): Least privilege per job confirmed. Actions now pinned to SHAs, Dependabot added.
+- 2026-11-04: Orchestrator: Waiting on Benjy's repository settings and DNS.

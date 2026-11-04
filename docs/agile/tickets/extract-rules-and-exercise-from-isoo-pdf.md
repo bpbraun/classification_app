@@ -1,6 +1,6 @@
 ---
 name: Extract rules and exercise from the ISOO PDF
-status: In review
+status: Done
 sprint: 1
 ---
 
@@ -17,3 +17,7 @@ sprint: 1
 
 - 2026-11-04: Developer (orchestrator, inline): Unit tests on synthetic layouts plus an end-to-end test on the pinned handbook. Banner and Declassify On computed from the extracted rules match ISOO's key (TOP SECRET//NOFORN, 20430904). 59 tests pass.
 - 2026-11-04: Finding while building: ISOO's key marks "the wolf did blow the house in" (S) but "the wolf blew that house in too" (U), and marks the title (S) although "Project name" is Unclassified. Decision with Benjy: show disagreements neutrally.
+- 2026-11-04: Code Review (Sonnet): Should-fix: multi-control cells and "None" mis-parsed; shorthand reasons "1.4(a), (c)" dropped; table parse could truncate silently; impossible dates accepted; unconsumed key portions not reported. Fixed all, with tests, and the extractor now asserts the expected row counts for the pinned PDF.
+- 2026-11-04: Security Check (Sonnet): pdfjs runs in Node only, on a hash-pinned file. Accepted risk.
+- 2026-11-04: Senior Review (Sonnet): Fixed the doc comment on `SourceRef.page` (it is the PDF page index).
+- 2026-11-04: Orchestrator: Accepted.
