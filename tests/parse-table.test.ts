@@ -88,6 +88,7 @@ describe("cell parsers", () => {
     expect(parseControls("REL TO USA, GBR")).toEqual(["REL TO USA, GBR"]);
     expect(parseControls("NOFORN, REL TO USA, GBR")).toEqual(["NOFORN", "REL TO USA, GBR"]);
     expect(parseControls("ORCON; NOFORN")).toEqual(["ORCON", "NOFORN"]);
+    expect(parseControls("NOFORN ORCON")).toEqual(["NOFORN", "ORCON"]);
     expect(parseControls("None")).toEqual([]);
     expect(parseControls("N/A")).toEqual([]);
   });
@@ -125,5 +126,12 @@ describe("rowsToRules", () => {
       },
     ]);
     expect(rule?.id).toBe("compilation-of-both-mission-and-geographic");
+  });
+
+  it("keeps ids at the length limit and cuts a single overlong word at the limit", () => {
+    const row = (element: string) => ({ page: 1, row: 1, cells: { element, level: "U" } });
+    const exact = "a".repeat(20) + " " + "b".repeat(27); // 48 characters as a slug
+    expect(rowsToRules([row(exact)])[0]?.id).toHaveLength(48);
+    expect(rowsToRules([row("x".repeat(60))])[0]?.id).toHaveLength(48);
   });
 });

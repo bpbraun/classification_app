@@ -68,6 +68,32 @@ describe("assembleDocument", () => {
     expect(result.authorityBlock?.problem).toMatch(/Refer to the OCA/);
   });
 
+  it("doesn't borrow a duration from portions marked unclassified", () => {
+    const result = assembleDocument(
+      guide,
+      [
+        { citedRuleIds: ["entry-points"], marking: { level: "U", controls: [] } },
+        { citedRuleIds: ["project-name"], marking: { level: "S", controls: [] } },
+      ],
+      options,
+    );
+    expect(result.banner).toBe("SECRET");
+    expect(result.authorityBlock?.declassifyOn).toBeNull();
+    expect(result.authorityBlock?.problem).toMatch(/cites no classified rule/);
+  });
+
+  it("refuses a date when any classified portion lacks a classified citation", () => {
+    const result = assembleDocument(
+      guide,
+      [
+        cited("building-material"),
+        { citedRuleIds: ["advice-from-mom"], marking: { level: "TS", controls: [] } },
+      ],
+      options,
+    );
+    expect(result.authorityBlock?.declassifyOn).toBeNull();
+  });
+
   it("never invents a date when a classified rule has no duration", () => {
     const broken: Guide = {
       ...guide,

@@ -130,7 +130,7 @@ export function parseControls(text: string | undefined): string[] {
   const relTo = /REL TO\b.*$/i.exec(value);
   const before = relTo ? value.slice(0, relTo.index) : value;
   const controls = before
-    .split(/\s*[,;/]+\s*/)
+    .split(/[\s,;/]+/)
     .map((c) => c.trim().toUpperCase())
     .filter((c) => c.length > 0 && !NO_CONTROLS.test(c));
   if (relTo) controls.push(normalizeSpace(relTo[0]).replace(/^rel to/i, "REL TO"));
@@ -164,8 +164,11 @@ function uniqueSlug(text: string, used: Set<string>): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-  const cut = full.length <= MAX_SLUG_LENGTH ? full : full.slice(0, MAX_SLUG_LENGTH + 1);
-  const base = cut === full ? full : cut.slice(0, Math.max(cut.lastIndexOf("-"), 1));
+  let base = full;
+  if (full.length > MAX_SLUG_LENGTH) {
+    const wordEnd = full.slice(0, MAX_SLUG_LENGTH + 1).lastIndexOf("-");
+    base = wordEnd > 0 ? full.slice(0, wordEnd) : full.slice(0, MAX_SLUG_LENGTH);
+  }
   let slug = base;
   for (let n = 2; used.has(slug); n++) slug = `${base}-${n}`;
   used.add(slug);

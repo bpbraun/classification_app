@@ -60,8 +60,9 @@ export function compactDate(isoDate: string): string {
 
 /**
  * Overall marking and classification authority block for a document as it is marked now.
- * Declassify On follows the longest duration among the classified rules cited. It is left
- * empty, with the reason, whenever the cited rules can't support a date.
+ * Declassify On follows the longest duration among the classified rules cited by portions
+ * marked classified. It is left empty, with the reason, whenever the citations can't
+ * support a date.
  */
 export function assembleDocument(
   guide: Guide,
@@ -72,15 +73,19 @@ export function assembleDocument(
   const banner = bannerText(overall);
   if (overall.level === "U") return { overall, banner, authorityBlock: null };
 
-  const classifiedRules = portions
-    .flatMap((p) => resolveRules(guide, p.citedRuleIds))
-    .filter((r) => r.level !== "U");
+  // Only portions marked classified contribute, and each must cite a classified rule.
+  const classifiedPortions = portions.filter((p) => p.marking.level !== "U");
+  const rulesPerPortion = classifiedPortions.map((p) =>
+    resolveRules(guide, p.citedRuleIds).filter((r) => r.level !== "U"),
+  );
+  const classifiedRules = rulesPerPortion.flat();
   const undated = classifiedRules.filter((r) => r.durationYears === null);
 
   let declassifyOn: string | null = null;
   let problem: string | null = null;
-  if (classifiedRules.length === 0) {
-    problem = "No cited rule is classified, so the guide gives no duration. Refer to the OCA.";
+  if (rulesPerPortion.some((rules) => rules.length === 0)) {
+    problem =
+      "A portion marked classified cites no classified rule, so the guide gives no duration for it. Refer to the OCA.";
   } else if (undated.length > 0) {
     problem = `"${undated[0]?.element}" has no duration in the guide. Refer to the OCA.`;
   } else {

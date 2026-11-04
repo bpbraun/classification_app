@@ -174,7 +174,7 @@ function authorityBlock(view: DocumentView): HTMLElement {
     h(
       "p",
       { class: "note" },
-      "Built from the current markings and the rules they cite. Declassify On is the document's date plus the longest duration among the cited classified rules, as the handbook describes.",
+      "Built from the current markings and the rules they cite. Declassify On is the document's date plus the longest duration among the classified rules cited by portions marked classified, as the handbook describes. If a classified portion cites no classified rule, there is no date.",
     ),
   );
 }

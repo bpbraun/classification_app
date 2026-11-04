@@ -22,3 +22,5 @@ sprint: 1
 - 2026-11-04: Senior Review (Sonnet): Asked for a seeded test matrix. Added: every citation pair × every level × NOFORN on and off (232 cases).
 - 2026-11-04: Security Check (Sonnet): Unknown citations never count as support. Pass.
 - 2026-11-04: Orchestrator: Accepted. 111 tests pass.
+- 2026-11-04: Re-review (Sonnet): FAIL. Blocker: Declassify On borrowed durations from portions marked unclassified, so raising a portion that cites only unclassified rules still produced a 25-year date. Fixed: only portions marked classified contribute, and each must cite a classified rule, otherwise there is no date and the block says why. Two tests added and confirmed in the browser. Parser nits (space-separated controls, slug length edge cases) fixed.
+- 2026-11-04: Orchestrator: Accepted. 114 tests pass.

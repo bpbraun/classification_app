@@ -53,14 +53,16 @@ describe("buildView", () => {
       new Map([["p1", { level: "S", controls: [] }]]),
       "Demo",
     );
-    expect(raised.authorityBlock?.declassifyOn).toBe("20430904");
+    // Paragraph 1 cites only an unclassified rule, so raising it leaves no supported date.
+    expect(raised.authorityBlock?.declassifyOn).toBeNull();
+    expect(raised.authorityBlock?.problem).toMatch(/cites no classified rule/);
     const allURaised = new Map<string, Marking>(
       data.exercise.paragraphs.map((p) => [p.id, { level: "U", controls: [] }]),
     );
     allURaised.set("p1", { level: "S", controls: [] });
     const onlyRaised = buildView(data, proposals, allURaised, "Demo");
     expect(onlyRaised.banner).toBe("SECRET");
-    expect(onlyRaised.authorityBlock).not.toBeNull();
+    expect(onlyRaised.authorityBlock?.declassifyOn).toBeNull();
   });
 
   it("matches ISOO's Declassify On date across formats", () => {
