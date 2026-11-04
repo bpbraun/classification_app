@@ -1,0 +1,354 @@
+{
+  "source": {
+    "url": "https://www.archives.gov/files/isoo/training/scg-handbook.pdf",
+    "title": "Developing and Using Security Classification Guides",
+    "publisher": "Information Security Oversight Office, National Archives",
+    "published": "October 2018",
+    "sha256": "290a92cd92bf9af88d57ddee42221280a730ad03197d9270984b0d33efc63415",
+    "pages": {
+      "examples": 8,
+      "guideCover": 11,
+      "guideTable": 12,
+      "exercise": 13,
+      "answerKey": 15
+    }
+  },
+  "guide": {
+    "id": "project-three-little-pigs",
+    "title": "Project Three Little Pigs SCG",
+    "issuedBy": "Information Security Oversight Office",
+    "date": "2018-08-15",
+    "originalClassificationAuthority": "James Halliwell-Phillipps",
+    "sourceUrl": "https://www.archives.gov/files/isoo/training/scg-handbook.pdf",
+    "rules": [
+      {
+        "id": "project-name",
+        "element": "Project name",
+        "level": "U",
+        "reasons": [],
+        "durationYears": null,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 1
+        }
+      },
+      {
+        "id": "the-existence-of-pigs",
+        "element": "The existence of pigs",
+        "level": "U",
+        "reasons": [],
+        "durationYears": null,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 2
+        }
+      },
+      {
+        "id": "the-existence-of-the-wolf",
+        "element": "The existence of the wolf",
+        "level": "U",
+        "reasons": [],
+        "durationYears": null,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 3
+        }
+      },
+      {
+        "id": "building-material-of-houses",
+        "element": "Building material of houses",
+        "level": "S",
+        "reasons": ["1.4(a)"],
+        "durationYears": 10,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 4
+        }
+      },
+      {
+        "id": "methods-used-to-destroy-houses",
+        "element": "Methods used to destroy houses",
+        "level": "S",
+        "reasons": ["1.4(c)"],
+        "durationYears": 25,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 5
+        }
+      },
+      {
+        "id": "entry-points-into-houses",
+        "element": "Entry points into houses",
+        "level": "TS",
+        "reasons": ["1.4(c)"],
+        "durationYears": 25,
+        "controls": ["NOFORN"],
+        "source": {
+          "page": 12,
+          "row": 6
+        }
+      },
+      {
+        "id": "advice-from-mom",
+        "element": "Advice from Mom",
+        "level": "U",
+        "reasons": [],
+        "durationYears": null,
+        "controls": [],
+        "source": {
+          "page": 12,
+          "row": 7
+        }
+      }
+    ]
+  },
+  "examples": [
+    {
+      "id": "handbook-example-1",
+      "title": "Handbook Example 1",
+      "issuedBy": "Information Security Oversight Office, National Archives",
+      "date": "2018-10-01",
+      "originalClassificationAuthority": "Illustrative example (no OCA)",
+      "sourceUrl": "https://www.archives.gov/files/isoo/training/scg-handbook.pdf",
+      "rules": [
+        {
+          "id": "mission",
+          "element": "Mission",
+          "level": "U",
+          "reasons": [],
+          "durationYears": null,
+          "controls": [],
+          "source": {
+            "page": 8,
+            "row": 1
+          }
+        },
+        {
+          "id": "geographic-location",
+          "element": "Geographic Location",
+          "level": "U",
+          "reasons": [],
+          "durationYears": null,
+          "controls": [],
+          "source": {
+            "page": 8,
+            "row": 2
+          }
+        },
+        {
+          "id": "compilation-of-both-mission-and-geographic-locat",
+          "element": "Compilation of both mission and geographic location within the same document",
+          "level": "S",
+          "reasons": ["1.4(a)"],
+          "durationYears": 25,
+          "controls": [],
+          "source": {
+            "page": 8,
+            "row": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "handbook-example-2",
+      "title": "Handbook Example 2",
+      "issuedBy": "Information Security Oversight Office, National Archives",
+      "date": "2018-10-01",
+      "originalClassificationAuthority": "Illustrative example (no OCA)",
+      "sourceUrl": "https://www.archives.gov/files/isoo/training/scg-handbook.pdf",
+      "rules": [
+        {
+          "id": "mission",
+          "element": "Mission",
+          "level": "S",
+          "reasons": ["1.4(a)"],
+          "durationYears": 25,
+          "controls": [],
+          "source": {
+            "page": 8,
+            "row": 1
+          }
+        },
+        {
+          "id": "geographic-location",
+          "element": "Geographic Location",
+          "level": "S",
+          "reasons": ["1.4(a)"],
+          "durationYears": 25,
+          "controls": [],
+          "source": {
+            "page": 8,
+            "row": 2
+          }
+        },
+        {
+          "id": "compilation-of-both-mission-and-geographic-locat",
+          "element": "Compilation of both mission and geographic location within the same document",
+          "level": "TS",
+          "reasons": ["1.4(a)"],
+          "durationYears": 25,
+          "controls": ["NOFORN"],
+          "source": {
+            "page": 8,
+            "row": 3
+          }
+        }
+      ]
+    }
+  ],
+  "exercise": {
+    "paragraphs": [
+      {
+        "id": "title",
+        "text": "Project Three Little Pigs"
+      },
+      {
+        "id": "p1",
+        "text": "Once upon a time there were three little pigs and the time came for them to leave home and seek their fortunes."
+      },
+      {
+        "id": "p2",
+        "text": "Before they left, their mother told them \"Whatever you do, do it the best that you can because that's the way to get along in the world.” The first little pig built his house out of straw because it was the easiest thing to do."
+      },
+      {
+        "id": "p3",
+        "text": "The second little pig built his house out of sticks. This was a little bit stronger than a straw house."
+      },
+      {
+        "id": "p4",
+        "text": "The third little pig built his house out of bricks."
+      },
+      {
+        "id": "p5",
+        "text": "One night the big bad wolf, who dearly loved to eat fat little piggies, came along and saw the first little pig in his house of straw. He said \"Let me in little pig or I'll huff and I'll puff and I'll blow your house in!\""
+      },
+      {
+        "id": "p6",
+        "text": "\"Not by the hair of my chinny chin chin\", said the little pig."
+      },
+      {
+        "id": "p7",
+        "text": "But of course the wolf did blow the house in and ate the first little pig. The wolf then came to the house of sticks."
+      },
+      {
+        "id": "p8",
+        "text": "\"Let me in little pig or I'll huff and I'll puff and I'll blow your house in.\" \"Not by the hair of my chinny chin chin\", said the little pig. But the wolf blew that house in too, and ate the second little pig."
+      },
+      {
+        "id": "p9",
+        "text": "The wolf then came to the house of bricks. \"Let me in.\" cried the wolf. \"Or I'll huff and I'll puff till I blow your house in.\""
+      },
+      {
+        "id": "p10",
+        "text": "\"Not by the hair of my chinny chin chin,\" said the pig."
+      },
+      {
+        "id": "p11",
+        "text": "Well, the wolf huffed and puffed but he could not blow down that brick house. But the wolf was a sly old wolf and he climbed up on the roof to look for a way into the brick house. The little pig saw the wolf climb up on the roof and lit a roaring fire in the fireplace and placed on it a large kettle of water. When the wolf finally found the hole in the chimney he crawled down and KERSPLASH right into that kettle of water and that was the end of his troubles with the big bad wolf."
+      }
+    ]
+  },
+  "answerKey": {
+    "banner": "TOP SECRET//NOFORN",
+    "documentDate": "2018-09-04",
+    "authorityBlock": {
+      "classifiedBy": "Peggy Ushman, Senior Program Analyst, ISOO",
+      "derivedFrom": "Project Three Little Pigs SCG, dated Aug 15, 2018",
+      "declassifyOn": "September 4, 2043"
+    },
+    "paragraphs": [
+      {
+        "paragraphId": "title",
+        "marking": {
+          "level": "S",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p1",
+        "marking": {
+          "level": "U",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p2",
+        "marking": {
+          "level": "S",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p3",
+        "marking": {
+          "level": "S",
+          "controls": []
+        },
+        "note": "ISOO's key combines this paragraph with p4 into one portion."
+      },
+      {
+        "paragraphId": "p4",
+        "marking": {
+          "level": "S",
+          "controls": []
+        },
+        "note": "ISOO's key combines this paragraph with p3 into one portion."
+      },
+      {
+        "paragraphId": "p5",
+        "marking": {
+          "level": "S",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p6",
+        "marking": {
+          "level": "U",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p7",
+        "marking": {
+          "level": "S",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p8",
+        "marking": {
+          "level": "U",
+          "controls": []
+        },
+        "note": "ISOO's key combines this paragraph with p6 into one portion."
+      },
+      {
+        "paragraphId": "p9",
+        "marking": {
+          "level": "S",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p10",
+        "marking": {
+          "level": "U",
+          "controls": []
+        }
+      },
+      {
+        "paragraphId": "p11",
+        "marking": {
+          "level": "TS",
+          "controls": ["NOFORN"]
+        }
+      }
+    ]
+  }
+}
