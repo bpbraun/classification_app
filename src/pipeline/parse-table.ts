@@ -99,10 +99,18 @@ export function parseLevel(text: string): Level {
   return match[1];
 }
 
+/**
+ * Reads E.O. 13526 Sec. 1.4 categories, including shorthand like "1.4(a), (c)".
+ * A reason cell holds only reasons, so every "(x)" after a "1.4" counts.
+ */
 export function parseReasons(text: string | undefined): string[] {
-  return [...(text ?? "").matchAll(/1\.4\s*\(([a-h])\)/gi)].map(
-    (m) => `1.4(${m[1]?.toLowerCase()})`,
+  const value = text ?? "";
+  const start = value.search(/1\.4/);
+  if (start < 0) return [];
+  const letters = [...value.slice(start).matchAll(/\(\s*([a-h])\s*\)/gi)].map((m) =>
+    (m[1] ?? "").toLowerCase(),
   );
+  return [...new Set(letters)].sort().map((l) => `1.4(${l})`);
 }
 
 export function parseDurationYears(text: string | undefined): number | null {
@@ -110,10 +118,23 @@ export function parseDurationYears(text: string | undefined): number | null {
   return match ? Number(match[1]) : null;
 }
 
+const NO_CONTROLS = /^(none|n\/a|na|-+|—)$/i;
+
+/**
+ * Reads dissemination controls. Controls are separated by commas, semicolons, or slashes,
+ * except that "REL TO" takes the country list that follows it.
+ */
 export function parseControls(text: string | undefined): string[] {
   const value = normalizeSpace(text ?? "");
-  if (value.length === 0) return [];
-  return value.startsWith("REL TO") ? [value] : value.split(/\s*[,;]\s*|\s+/).filter(Boolean);
+  if (value.length === 0 || NO_CONTROLS.test(value)) return [];
+  const relTo = /REL TO\b.*$/i.exec(value);
+  const before = relTo ? value.slice(0, relTo.index) : value;
+  const controls = before
+    .split(/\s*[,;/]+\s*/)
+    .map((c) => c.trim().toUpperCase())
+    .filter((c) => c.length > 0 && !NO_CONTROLS.test(c));
+  if (relTo) controls.push(normalizeSpace(relTo[0]).replace(/^rel to/i, "REL TO"));
+  return controls;
 }
 
 /** Turns raw table rows into rules with stable, readable ids. */
@@ -135,12 +156,16 @@ export function rowsToRules(rows: readonly RawRow[]): Rule[] {
   });
 }
 
+/** Longest slug kept, cut back to a whole word. */
+const MAX_SLUG_LENGTH = 48;
+
 function uniqueSlug(text: string, used: Set<string>): string {
-  const base = text
+  const full = text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 48);
+    .replace(/^-+|-+$/g, "");
+  const cut = full.length <= MAX_SLUG_LENGTH ? full : full.slice(0, MAX_SLUG_LENGTH + 1);
+  const base = cut === full ? full : cut.slice(0, Math.max(cut.lastIndexOf("-"), 1));
   let slug = base;
   for (let n = 2; used.has(slug); n++) slug = `${base}-${n}`;
   used.add(slug);

@@ -31,6 +31,24 @@ export function bannerText(marking: Marking): string {
   return [BANNER_NAMES[marking.level], ...marking.controls].join("//");
 }
 
+export function isLevel(value: string): value is Level {
+  return (LEVELS as readonly string[]).includes(value);
+}
+
+/** The marking that covers all the given ones: the highest level and every control. */
+export function overallMarking(markings: readonly Marking[]): Marking {
+  return {
+    level: maxLevel(markings.map((m) => m.level)),
+    controls: unionControls(markings.map((m) => m.controls)),
+  };
+}
+
+/** Screen-reader friendly marking, e.g. "Top Secret, NOFORN". */
+export function spokenMarking(marking: Marking): string {
+  const name = BANNER_NAMES[marking.level].toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  return [name, ...marking.controls].join(", ");
+}
+
 /** Sorted, de-duplicated union of control lists. */
 export function unionControls(lists: readonly (readonly string[])[]): string[] {
   return [...new Set(lists.flat())].sort();

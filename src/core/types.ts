@@ -4,7 +4,7 @@ export type Level = (typeof LEVELS)[number];
 
 /** Where a rule came from in the source document, so every rule can be checked by a person. */
 export interface SourceRef {
-  /** Printed page number in the source PDF. */
+  /** Page number in the source PDF (1-based), usable as a #page= link. */
   page: number;
   /** Row of the classification table, counting from 1. */
   row: number;

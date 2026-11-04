@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { assembleDocument } from "../src/core/assemble";
 import { findConflicts } from "../src/core/conflicts";
+import { deriveMarking } from "../src/core/validator";
 import { extractFromItems, PAGES } from "../src/pipeline/extract";
 import { readTextItems, sha256File } from "../src/pipeline/pdf-text";
 import { extractedSchema } from "../src/data/schema";
@@ -64,12 +65,18 @@ describe("extracting the ISOO handbook", async () => {
   it("matches ISOO's banner and declassification date when every rule is cited", () => {
     const assembled = assembleDocument(
       data.guide,
-      [{ paragraphId: "all", citedRuleIds: data.guide.rules.map((r) => r.id) }],
+      [
+        {
+          citedRuleIds: data.guide.rules.map((r) => r.id),
+          marking: deriveMarking(data.guide.rules) ?? { level: "U", controls: [] },
+        },
+      ],
       { documentDate: data.answerKey.documentDate, classifiedBy: "Test" },
     );
     expect(assembled.banner).toBe(data.answerKey.banner);
     expect(assembled.authorityBlock?.declassifyOn).toBe("20430904");
     expect(data.answerKey.authorityBlock.declassifyOn).toBe("September 4, 2043");
+    expect(data.answerKey.authorityBlock.declassifyOnDate).toBe("2043-09-04");
   });
 
   it("finds the conflict between handbook Examples 1 and 2", () => {

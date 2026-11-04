@@ -80,10 +80,16 @@ describe("cell parsers", () => {
 
   it("reads reasons, durations, and controls", () => {
     expect(parseReasons("1.4(a), 1.4 (C)")).toEqual(["1.4(a)", "1.4(c)"]);
+    expect(parseReasons("1.4(c), (a)")).toEqual(["1.4(a)", "1.4(c)"]);
+    expect(parseReasons("None")).toEqual([]);
     expect(parseDurationYears("25 years *")).toBe(25);
     expect(parseDurationYears(undefined)).toBeNull();
     expect(parseControls("NOFORN")).toEqual(["NOFORN"]);
     expect(parseControls("REL TO USA, GBR")).toEqual(["REL TO USA, GBR"]);
+    expect(parseControls("NOFORN, REL TO USA, GBR")).toEqual(["NOFORN", "REL TO USA, GBR"]);
+    expect(parseControls("ORCON; NOFORN")).toEqual(["ORCON", "NOFORN"]);
+    expect(parseControls("None")).toEqual([]);
+    expect(parseControls("N/A")).toEqual([]);
   });
 });
 
@@ -105,5 +111,19 @@ describe("rowsToRules", () => {
       source: { page: 12, row: 1 },
     });
     expect(rules[1]?.durationYears).toBeNull();
+  });
+
+  it("cuts long ids back to a whole word", () => {
+    const [rule] = rowsToRules([
+      {
+        page: 8,
+        row: 1,
+        cells: {
+          element: "Compilation of both mission and geographic location within the same document",
+          level: "Unclassified",
+        },
+      },
+    ]);
+    expect(rule?.id).toBe("compilation-of-both-mission-and-geographic");
   });
 });

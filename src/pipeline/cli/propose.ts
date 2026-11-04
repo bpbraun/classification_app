@@ -3,7 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import Anthropic from "@anthropic-ai/sdk";
 import { checkProposal } from "../../core/validator";
 import type { Proposal } from "../../core/types";
-import { AnthropicProposer, promptTemplateSha256 } from "../propose";
+import { AnthropicProposer, guideSha256, promptTemplateSha256 } from "../propose";
 import { extractedSchema, proposalsFileSchema, type ProposalsFile } from "../../data/schema";
 import { PATHS } from "./paths";
 
@@ -17,6 +17,10 @@ if (!apiKey) {
 }
 
 const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL;
+if (!/^claude-[a-z0-9.-]+$/.test(model)) {
+  console.error(`ANTHROPIC_MODEL must look like a Claude model id, got "${model}".`);
+  process.exit(1);
+}
 const data = extractedSchema.parse(JSON.parse(await readFile(PATHS.extracted, "utf8")));
 const proposer = new AnthropicProposer(new Anthropic({ apiKey }), model);
 
@@ -38,6 +42,7 @@ const file: ProposalsFile = proposalsFileSchema.parse({
     model,
     promptTemplateSha256: promptTemplateSha256(),
     sourceSha256: data.source.sha256,
+    guideSha256: guideSha256(data.guide),
     createdAt: new Date().toISOString(),
   },
   proposals,

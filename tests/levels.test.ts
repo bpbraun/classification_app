@@ -1,5 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { bannerText, compareLevels, maxLevel, portionText } from "../src/core/levels";
+import {
+  bannerText,
+  compareLevels,
+  isLevel,
+  maxLevel,
+  overallMarking,
+  portionText,
+  spokenMarking,
+} from "../src/core/levels";
+
+describe("marking helpers", () => {
+  it("combines markings into the overall marking", () => {
+    expect(
+      overallMarking([
+        { level: "S", controls: [] },
+        { level: "C", controls: ["NOFORN"] },
+      ]),
+    ).toEqual({ level: "S", controls: ["NOFORN"] });
+  });
+
+  it("recognizes levels and speaks markings in words", () => {
+    expect(isLevel("TS")).toBe(true);
+    expect(isLevel("SECRET")).toBe(false);
+    expect(spokenMarking({ level: "TS", controls: ["NOFORN"] })).toBe("Top Secret, NOFORN");
+  });
+});
 
 describe("classification levels", () => {
   it("orders levels from Unclassified to Top Secret", () => {

@@ -3,6 +3,7 @@ import extracted from "../data/extracted.json";
 import proposalsJson from "../data/proposals.json";
 import { extractedSchema, proposalsFileSchema } from "../src/data/schema";
 import { buildView, labelFor, readableNote } from "../web/state";
+import type { Marking } from "../src/core";
 
 const data = extractedSchema.parse(extracted);
 const proposals = proposalsFileSchema.parse(proposalsJson);
@@ -43,6 +44,39 @@ describe("buildView", () => {
       "missing-control",
     ]);
     expect(changed.banner).toBe("SECRET");
+  });
+
+  it("builds the authority block from the markings as changed", () => {
+    const raised = buildView(
+      data,
+      proposals,
+      new Map([["p1", { level: "S", controls: [] }]]),
+      "Demo",
+    );
+    expect(raised.authorityBlock?.declassifyOn).toBe("20430904");
+    const allURaised = new Map<string, Marking>(
+      data.exercise.paragraphs.map((p) => [p.id, { level: "U", controls: [] }]),
+    );
+    allURaised.set("p1", { level: "S", controls: [] });
+    const onlyRaised = buildView(data, proposals, allURaised, "Demo");
+    expect(onlyRaised.banner).toBe("SECRET");
+    expect(onlyRaised.authorityBlock).not.toBeNull();
+  });
+
+  it("matches ISOO's Declassify On date across formats", () => {
+    expect(view.declassifyMatchesKey).toBe(true);
+  });
+
+  it("counts a portion with no guidance as missing, not as agreeing", () => {
+    const noCites = {
+      ...proposals,
+      proposals: proposals.proposals.map((p) =>
+        p.paragraphId === "p1" ? { ...p, citedRuleIds: [] } : p,
+      ),
+    };
+    const result = buildView(data, noCites, new Map(), "Demo");
+    expect(result.portions[1]?.current).toBeNull();
+    expect(result.comparison.summary.missing).toBe(1);
   });
 
   it("drops the authority block when everything is marked unclassified", () => {

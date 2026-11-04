@@ -1,4 +1,4 @@
-import { compareLevels, maxLevel, portionText, unionControls } from "./levels";
+import { compareLevels, overallMarking, portionText } from "./levels";
 import type { Guide, Marking, Proposal, Rule } from "./types";
 
 export type FindingKind =
@@ -26,11 +26,7 @@ export interface CheckResult {
 
 /** The marking a set of rules supports: the highest level and every control they carry. */
 export function deriveMarking(rules: readonly Rule[]): Marking | null {
-  if (rules.length === 0) return null;
-  return {
-    level: maxLevel(rules.map((r) => r.level)),
-    controls: unionControls(rules.map((r) => r.controls)),
-  };
+  return rules.length === 0 ? null : overallMarking(rules);
 }
 
 export function resolveRules(guide: Guide, ruleIds: readonly string[]): Rule[] {

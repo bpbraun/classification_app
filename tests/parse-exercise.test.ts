@@ -66,10 +66,11 @@ describe("parseAnswerKey", () => {
         { id: "title", text: "Project Three Little Pigs" },
         { id: "p1", text: "Once upon a time." },
         { id: "p2", text: "The end." },
+        { id: "p3", text: "The wolf found the hole in the chimney." },
       ],
       key,
     );
-    expect(aligned.map((a) => a.marking.level)).toEqual(["S", "U", "U"]);
+    expect(aligned.map((a) => a.marking.level)).toEqual(["S", "U", "U", "TS"]);
     expect(aligned[1]?.note).toContain("p2");
     expect(aligned[0]?.note).toBeUndefined();
   });
@@ -93,6 +94,13 @@ describe("parseAnswerKey", () => {
     expect(aligned.every((a) => a.note === undefined)).toBe(true);
   });
 
+  it("refuses a key with portions no paragraph accounts for", () => {
+    const key = parseAnswerKey(lines);
+    expect(() => alignKey([{ id: "title", text: "Project Three Little Pigs" }], key)).toThrow(
+      /match no exercise paragraph/,
+    );
+  });
+
   it("refuses to guess when a paragraph is not in the key", () => {
     const key = parseAnswerKey(lines);
     expect(() => alignKey([{ id: "p9", text: "Not in the key." }], key)).toThrow();
@@ -107,5 +115,6 @@ describe("helpers", () => {
   it("converts written dates to ISO", () => {
     expect(toIsoDate("August 15, 2018")).toBe("2018-08-15");
     expect(() => toIsoDate("Aug 15 2018")).toThrow();
+    expect(() => toIsoDate("February 31, 2018")).toThrow();
   });
 });

@@ -1,12 +1,27 @@
+import { parseIsoDate } from "../core/assemble";
 import type { KeyParagraph } from "../core/compare";
+import { isLevel } from "../core/levels";
 import type { Level, Marking, Paragraph } from "../core/types";
 import { lineText, normalizeSpace, type Line } from "./layout";
 
 const BLANK_PORTION = /^\(\s*\)\s*/;
 const KEY_PORTION = /^\((TS|S|C|U)((?:\/{1,2}[A-Z][A-Z ,]*)*)\)\s*/;
 const CONTROL_EXPANSIONS: Readonly<Record<string, string>> = { NF: "NOFORN" };
-const MONTH_DATE =
-  /^(January|February|March|April|May|June|July|August|September|October|November|December) (\d{1,2}), (\d{4})$/;
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+const MONTH_DATE = new RegExp(`^(${MONTHS.join("|")}) (\\d{1,2}), (\\d{4})$`);
 const STOP_LINE = /^(Classified By:|Derived From:|Declassify On:)|^[A-Z ]+\/\/[A-Z]+$|^_+$/;
 
 /** Splits the blank exercise into paragraphs, each starting with an empty "( )" portion mark. */
@@ -35,7 +50,7 @@ export function parseAnswerKey(lines: readonly Line[]): ParsedKey {
     const match = KEY_PORTION.exec(raw);
     if (!match) throw new Error(`Answer key portion has no marking: "${raw.slice(0, 40)}"`);
     return {
-      marking: parsePortionMarking(match[1] as Level, match[2] ?? ""),
+      marking: parsePortionMarking(toLevel(match[1] ?? ""), match[2] ?? ""),
       text: raw.slice(match[0].length),
     };
   });
@@ -68,6 +83,10 @@ export function alignKey(paragraphs: readonly Paragraph[], key: ParsedKey): KeyP
     cursor += offset;
     return cursor;
   });
+  const unused = key.portions.map((_, i) => i).filter((i) => !indexes.includes(i));
+  if (unused.length > 0) {
+    throw new Error(`Answer key portions ${unused.join(", ")} match no exercise paragraph`);
+  }
   return paragraphs.map((paragraph, i) => {
     const index = indexes[i] ?? -1;
     const portion = key.portions[index];
@@ -118,26 +137,18 @@ function labeled(texts: readonly string[], label: string): string {
   return line.slice(label.length).trim();
 }
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 export function toIsoDate(text: string): string {
   const match = MONTH_DATE.exec(text.trim());
   if (!match) throw new Error(`Expected a date like "September 4, 2018", got "${text}"`);
-  const month = MONTHS.indexOf(match[1] ?? "") + 1;
-  return `${match[3]}-${String(month).padStart(2, "0")}-${String(match[2]).padStart(2, "0")}`;
+  const month = (MONTHS as readonly string[]).indexOf(match[1] ?? "") + 1;
+  const iso = `${match[3]}-${String(month).padStart(2, "0")}-${String(match[2]).padStart(2, "0")}`;
+  parseIsoDate(iso); // rejects impossible days such as February 31
+  return iso;
+}
+
+function toLevel(value: string): Level {
+  if (!isLevel(value)) throw new Error(`Unrecognized portion level "${value}"`);
+  return value;
 }
 
 /** Text normalized for containment checks: case, quotes, and spacing ignored. */

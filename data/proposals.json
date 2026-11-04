@@ -4,6 +4,7 @@
     "description": "Hand-written placeholder used to build the interface. Not model output. Replace by running `npm run propose` before release.",
     "model": null,
     "promptTemplateSha256": null,
+    "guideSha256": null,
     "sourceSha256": "290a92cd92bf9af88d57ddee42221280a730ad03197d9270984b0d33efc63415",
     "createdAt": "2026-11-04T22:30:00Z"
   },

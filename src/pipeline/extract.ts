@@ -11,6 +11,9 @@ export const SOURCE = {
   published: "October 2018",
 } as const;
 
+/** Rows expected in each table of the pinned handbook. A mismatch means the parse went wrong. */
+export const EXPECTED_ROWS = { guideTable: 7, exampleTable: 3 } as const;
+
 /** Where each piece lives in the October 2018 handbook. Pinned to the file's SHA-256. */
 export const PAGES = {
   examples: 8,
@@ -49,6 +52,7 @@ export function extractFromItems(items: readonly TextItem[], sourceSha256: strin
   const cover = parseGuideCover(onPage(PAGES.guideCover));
   const [mainTable] = parseTables(onPage(PAGES.guideTable));
   if (!mainTable) throw new Error("No classification table found in the sample guide");
+  expectRows("sample guide", mainTable.length, EXPECTED_ROWS.guideTable);
 
   const guide: Guide = {
     id: "project-three-little-pigs",
@@ -63,6 +67,8 @@ export function extractFromItems(items: readonly TextItem[], sourceSha256: strin
   const [example1, example2] = parseTables(onPage(PAGES.examples));
   if (!example1 || !example2)
     throw new Error("Expected two example tables on the compilation page");
+  expectRows("Example 1", example1.length, EXPECTED_ROWS.exampleTable);
+  expectRows("Example 2", example2.length, EXPECTED_ROWS.exampleTable);
   const exampleGuide = (n: 1 | 2, rows: typeof example1): Guide => ({
     id: `handbook-example-${n}`,
     title: `Handbook Example ${n}`,
@@ -84,8 +90,17 @@ export function extractFromItems(items: readonly TextItem[], sourceSha256: strin
     answerKey: {
       banner: key.banner,
       documentDate: key.documentDate,
-      authorityBlock: key.authorityBlock,
+      authorityBlock: {
+        ...key.authorityBlock,
+        declassifyOnDate: toIsoDate(key.authorityBlock.declassifyOn),
+      },
       paragraphs: alignKey(paragraphs, key),
     },
   };
+}
+
+function expectRows(table: string, actual: number, expected: number): void {
+  if (actual !== expected) {
+    throw new Error(`Read ${actual} rows from the ${table} table; expected ${expected}`);
+  }
 }

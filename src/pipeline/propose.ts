@@ -36,11 +36,23 @@ export function buildUserPrompt(guide: Guide, paragraph: Paragraph): string {
   ].join("\n\n");
 }
 
-/** Fingerprint of the prompt template, recorded with every run. */
+/**
+ * Fingerprint of the prompt template and request settings, recorded with every run.
+ * Built over a fixed two-rule sample so changes to how rules are listed also change it.
+ */
 export function promptTemplateSha256(): string {
-  const template =
-    SYSTEM_PROMPT + buildUserPrompt(TEMPLATE_GUIDE, { id: "p", text: "{paragraph}" });
+  const template = [
+    SYSTEM_PROMPT,
+    buildUserPrompt(TEMPLATE_GUIDE, { id: "p", text: "{paragraph}" }),
+    JSON.stringify(REQUEST_SETTINGS),
+  ].join("\n---\n");
   return createHash("sha256").update(template).digest("hex");
+}
+
+/** Fingerprint of what the model is shown about a guide: its rule ids and elements, in order. */
+export function guideSha256(guide: Guide): string {
+  const shown = guide.rules.map((r) => `${r.id}\t${r.element}`).join("\n");
+  return createHash("sha256").update(shown).digest("hex");
 }
 
 /** Parses and validates the model's reply. Rejects anything not shaped exactly right. */
@@ -73,8 +85,29 @@ const TEMPLATE_GUIDE: Guide = {
   date: "2000-01-01",
   originalClassificationAuthority: "",
   sourceUrl: "https://example.invalid",
-  rules: [],
+  rules: [
+    {
+      id: "sample-a",
+      element: "{element A}",
+      level: "U",
+      reasons: [],
+      durationYears: null,
+      controls: [],
+      source: { page: 1, row: 1 },
+    },
+    {
+      id: "sample-b",
+      element: "{element B}",
+      level: "U",
+      reasons: [],
+      durationYears: null,
+      controls: [],
+      source: { page: 1, row: 2 },
+    },
+  ],
 };
+
+const REQUEST_SETTINGS = { max_tokens: 400, temperature: 0 } as const;
 
 /** Minimal client surface we need, so tests can supply a fake. */
 export interface MessagesClient {
@@ -98,8 +131,7 @@ export class AnthropicProposer implements Proposer {
   async propose(guide: Guide, paragraph: Paragraph): Promise<Proposal> {
     const response = await this.client.messages.create({
       model: this.modelName,
-      max_tokens: 400,
-      temperature: 0,
+      ...REQUEST_SETTINGS,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildUserPrompt(guide, paragraph) }],
     });

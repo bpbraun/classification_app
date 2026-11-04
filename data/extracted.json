@@ -149,7 +149,7 @@
           }
         },
         {
-          "id": "compilation-of-both-mission-and-geographic-locat",
+          "id": "compilation-of-both-mission-and-geographic",
           "element": "Compilation of both mission and geographic location within the same document",
           "level": "S",
           "reasons": [
@@ -201,7 +201,7 @@
           }
         },
         {
-          "id": "compilation-of-both-mission-and-geographic-locat",
+          "id": "compilation-of-both-mission-and-geographic",
           "element": "Compilation of both mission and geographic location within the same document",
           "level": "TS",
           "reasons": [
@@ -277,7 +277,8 @@
     "authorityBlock": {
       "classifiedBy": "Peggy Ushman, Senior Program Analyst, ISOO",
       "derivedFrom": "Project Three Little Pigs SCG, dated Aug 15, 2018",
-      "declassifyOn": "September 4, 2043"
+      "declassifyOn": "September 4, 2043",
+      "declassifyOnDate": "2043-09-04"
     },
     "paragraphs": [
       {

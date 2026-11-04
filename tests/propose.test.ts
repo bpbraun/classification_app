@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   AnthropicProposer,
   buildUserPrompt,
+  guideSha256,
   parseModelAnswer,
   promptTemplateSha256,
   type MessagesClient,
@@ -69,6 +70,17 @@ describe("AnthropicProposer", () => {
     });
     expect(proposal.citedRuleIds).toEqual(["entry-points"]);
     expect(calls[0]).toMatchObject({ model: "test-model", temperature: 0 });
+  });
+});
+
+describe("guideSha256", () => {
+  it("changes when the rules shown to the model change", () => {
+    const renamed = {
+      ...guide,
+      rules: guide.rules.map((r, i) => (i === 0 ? { ...r, element: "Project codename" } : r)),
+    };
+    expect(guideSha256(renamed)).not.toBe(guideSha256(guide));
+    expect(guideSha256({ ...guide, title: "Other" })).toBe(guideSha256(guide));
   });
 });
 
